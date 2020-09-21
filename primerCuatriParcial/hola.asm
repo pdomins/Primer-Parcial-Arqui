@@ -73,10 +73,11 @@ writeToShell:
     mov edx, [ebp+12]
     int 80h
 
-    pop ebx
-    pop ecx
     pop edx
-    
+    pop ecx
+    pop ebx
+	
+    LEAVE
     ret
 
 ;-----------------------------------------------------------

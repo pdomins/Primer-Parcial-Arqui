@@ -23,10 +23,11 @@ int pot(int base, int exp){
 }
 
 int strToNum(const char* input, unsigned int len){
+    writeToShell(input, 1);
     int rta = 0;
     int idx = 0;
     char aux;
-    while( idx != len){
+    while( idx != len && input[idx]!= '\n'){
         rta += (input[idx] - '0') * pot(10, len - idx - 1);
         idx++;
     }
@@ -58,14 +59,11 @@ void numToStr(int num, char* string, int len) {
 }
 
 int main(int argc, char* argv[]){
-    char firstNum[1];
+    char firstNum[2];
     readFromShell(firstNum, 2);
-    char secondNum[1];
-    readFromShell(secondNum, 2);
-    writeToShell(firstNum, 1);
-    writeToShell(secondNum, 1);
     int first = strToNum(firstNum, strlen(firstNum));
-    int second = strToNum(secondNum, strlen(secondNum));
+    readFromShell(firstNum, 2);
+    int second = strToNum(firstNum, strlen(firstNum));
     int rta = first + second;
     int len = numlen(rta);
     char toPrint[len + 1];
