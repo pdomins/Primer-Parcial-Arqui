@@ -18,7 +18,7 @@ section .text
 ; print - imprime una cadena en la salida estandar
 ;-----------------------------------------------------------
 ; Argumentos:
-;	ebx: cadena a imprimer en pantalla, terminada con 0
+;	ebx: cadena a imprimir en pantalla, terminada con 0
 ;-----------------------------------------------------------
 print:
 	pushad		; hago backup de los registros
