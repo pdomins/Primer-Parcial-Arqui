@@ -1,14 +1,26 @@
 #include <stdio.h>
 
-int pot(int base, int exp){
-    if(exp==0){
-        base = 1;
+//int pot(int base, int exp){
+//    if(exp==0){
+//        base = 1;
+//    }
+//   else if (exp%2 == 0) {
+//        return pot(base, exp/2) * pot(base, exp/2);
+//   }
+//   else
+//        return base * pot(base, exp/2) * pot(base, exp/2);
+//}
+
+int pot(int base, int exp) {
+    if(exp == 0) {
+        return 1;
     }
-   else if (exp%2 == 0) {
-        return pot(base, exp/2) * pot(base, exp/2);
-   }
-   else 
-        return base * pot(base, exp/2) * pot(base, exp/2);
+    int resultado = 1;
+    while(exp > 0) {
+        resultado *= base;
+        exp --;
+    }
+    return resultado;
 }
 
 int strToNum(const char* input, unsigned int len){
@@ -59,4 +71,6 @@ int main(int argc, char * argv[]) {
     for(int i = 0; i < len; i++) {
         printf("%c", (int)string[i]);
     }putchar('\n');
+    int num2 = strToNum(string, len);
+    printf("Num2: %d\n", num2);
 }
