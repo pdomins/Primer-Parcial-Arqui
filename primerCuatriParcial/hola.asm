@@ -13,22 +13,41 @@ readFromShell:
     push ebx
     push ecx
     push edx 
-
-
+	push esi
+	push edi
+	
 	mov ebx, string1
     mov eax, length1
 	call print
 
-	mov eax, SYS_READ       ; syscall read
 	mov ebx, STDIN          ; fd -> entrada por terminal
     mov ecx, [ebp+8]        ; lugar en donde guarda lo que lee
-    mov edx, [ebp+12]       ; buffer longitud de lectura
+    mov edi, [ebp+12]       ; longitud de lectura maxima
+	mov esi, 0				; bytes que llega a leer
+	
+keep_going:
+	mov edx, 1				; indico que quiero leer solo un byte
+	mov eax, SYS_READ       ; syscall read
 	int 80h
 
+	cmp byte [ecx], '0'		; verificamos que sea un numero
+	jl end
+	cmp byte [ecx], '9'
+	jg end
+	
+	inc esi					; solo incrementa si es un numero
+	dec edi
+	cmp edi,0
+	je end
+	inc ecx
+	jmp keep_going
+end:
+	mov eax, esi
+	pop edi
+	pop esi	
     pop edx
     pop ecx
     pop ebx
-
     LEAVE
     ret
 
@@ -76,7 +95,7 @@ writeToShell:
     pop edx
     pop ecx
     pop ebx
-	
+
     LEAVE
     ret
 
@@ -172,5 +191,5 @@ section .data                                   ; 1Data segment
     SYS_WRITE equ 4
     STDIN equ 0
     STDOUT equ 1
-    string1 db "NUMERO DE UNA CIFRA POR FAVOR: ", 0     ; Ask the user to enter a number
+    string1 db "Please enter a number: ", 0     ; Ask the user to enter a number
     length1 equ $-string1                       ; The length of the message

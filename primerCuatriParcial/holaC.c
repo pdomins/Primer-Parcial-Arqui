@@ -6,28 +6,28 @@
     Su programa debe recibir dos números mediante lectura del teclado, realizar
     la suma de ambos e imprimir en la pantalla el resultado.
 */
-extern void readFromShell(char* buffer, unsigned int size);
+extern int readFromShell(char* buffer, unsigned int size);
 //extern int strlen(char* string);
 extern int writeToShell(char * buffer, int size);
 //extern char 1* numToStr(int num);
 
-int pot(int base, int exp){
-    if(exp==0){
-        base = 1;
+int pot(int base, int exp) {
+    if(exp == 0) {
+        return 1;
     }
-   else if (exp%2 == 0) {
-        return pot(base, exp/2) * pot(base, exp/2);
-   }
-   else 
-        return base * pot(base, exp/2) * pot(base, exp/2);
+    int resultado = 1;
+    while(exp > 0) {
+        resultado *= base;
+        exp --;
+    }
+    return resultado;
 }
 
-int strToNum(const char* input, unsigned int len){
-    writeToShell(input, 1);
+int strToNum(char* input, unsigned int len){
     int rta = 0;
     int idx = 0;
     char aux;
-    while( idx != len && input[idx]!= '\n'){
+    while( idx != len ){
         rta += (input[idx] - '0') * pot(10, len - idx - 1);
         idx++;
     }
@@ -48,28 +48,35 @@ int numlen(int num) {
         i++;
         num /= 10;
     }
+    return i;
 }
 
 void numToStr(int num, char* string, int len) {
     string[len] = 0;
     for(int i = len - 1; i >= 0; i--) {
-        string[i] = num % 10;
+        string[i] = (num % 10) + '0';
         num /= 10;
     }
 }
 
 int main(int argc, char* argv[]){
-    char firstNum[2];
-    readFromShell(firstNum, 2);
-    int first = strToNum(firstNum, strlen(firstNum));
-    readFromShell(firstNum, 2);
-    int second = strToNum(firstNum, strlen(firstNum));
+    char firstNum[50];
+    int size_first = readFromShell(firstNum, 50);
+    if(size_first == 0)
+        return 0;
+    int first = strToNum(firstNum, size_first);
+    char secondNum[50];
+    int size_second = readFromShell(secondNum, 50);
+    if(size_second == 0)
+        return 0;
+    int second = strToNum(secondNum, size_second);
     int rta = first + second;
     int len = numlen(rta);
     char toPrint[len + 1];
     numToStr(rta, toPrint, len);
-    //char toPrint = numToStr(rta);
-    writeToShell(toPrint, strlen(toPrint));
+    writeToShell("The sum between those numbers is: ",35);
+    writeToShell(toPrint, len);
+    writeToShell("\n", 1);
     return 0;
 }
 
