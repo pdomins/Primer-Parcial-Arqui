@@ -11,6 +11,7 @@ STDIN equ 0
 STDOUT equ 1
 
 ;en eax
+SYS_CREAT equ 8
 SYS_EXIT equ 1
 SYS_READ equ 3
 SYS_WRITE equ 4
@@ -98,6 +99,25 @@ write:
   		  mov ebx, STDOUT   ; fd
   		  mov ecx, [ebp+8]  ; recibo por stack el puntero al lugar de memoria donde voy a escribir
   		  mov edx, [ebp+12] ; recibo el size
+  		  int 80h
+		
+        mov esp, ebp		; desarmado stackframe
+       	pop ebp
+       	ret
+
+;------------------------------------------------------------------------
+
+;------------------------------------------------------------------------
+;			CREAT
+;creat eax=0x08/ ebx=const char *pathname/ ecx=umode_t mode
+;------------------------------------------------------------------------
+creat:
+       	push ebp
+       	mov ebp, esp		; armado stackframe
+
+  		  mov eax, SYS_CREAT
+  		  mov ebx, [ebp+8]  ; recibo por stack el nombre del archivo a crear
+  		  mov ecx, [ebp+12] ; recibo los permisos
   		  int 80h
 		
         mov esp, ebp		; desarmado stackframe

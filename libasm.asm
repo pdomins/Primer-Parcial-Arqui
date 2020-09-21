@@ -185,7 +185,26 @@ close:
     int 80h
 	leave
     ret
+;-----------------------------------------------------------
 
+;------------------------------------------------------------------------
+;            CREAT
+;creat eax=0x08/ ebx=const char *pathname/ ecx=umode_t mode
+;------------------------------------------------------------------------
+creat:
+           push ebp
+           mov ebp, esp        ; armado stackframe
+
+            mov eax, SYS_creat
+            mov ebx, [ebp+8]  ; recibo por stack el nombre del archivo a crear
+            mov ecx, [ebp+12] ; recibo los permisos
+            int 80h
+
+        mov esp, ebp        ; desarmado stackframe
+           pop ebp
+           ret
+
+;------------------------------------------------------------------------
 
 section .data
 
@@ -201,3 +220,4 @@ section .data
     SYS_write equ 4
     SYS_open equ 5
     SYS_close equ 6
+    SYS_creat equ 8
