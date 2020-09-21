@@ -22,7 +22,7 @@ int strToNum(const char* input, unsigned int len){
     return rta;
 }
 
-int strlen(char * string) {
+int stringlen(char * string) {
     int i = 0;
     while(string[i] != 0 && string[i] != '\n') {
         i++;
@@ -36,12 +36,14 @@ int numlen(int num) {
         i++;
         num /= 10;
     }
+    return i;
 }
 
-void numToStr(int num, char* string, int len) {
+void numToStr(int num, char * string, int len) {
     string[len] = 0;
     for(int i = len - 1; i >= 0; i--) {
-        string[i] = num % 10;
+        string[i] = (num % 10) + '0';
+
         num /= 10;
     }
 }
@@ -49,6 +51,12 @@ void numToStr(int num, char* string, int len) {
 int main(int argc, char * argv[]) {
     int num = 2345;
     int len = numlen(num);
-    char string[len];
-    printf("Numero: %d - Longitud: %d", num, len);
+    char string[len + 1];
+    string[len] = 0;
+    printf("Numero: %d - Longitud: %d\n", num, len); //2345 - 4
+    numToStr(num, string, len);
+    printf("%s\n", string);
+    for(int i = 0; i < len; i++) {
+        printf("%c", (int)string[i]);
+    }putchar('\n');
 }
