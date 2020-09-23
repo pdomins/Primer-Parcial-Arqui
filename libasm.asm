@@ -206,6 +206,27 @@ creat:
 
 ;------------------------------------------------------------------------
 
+
+;-----------------------------------------------------------
+; clear_buffer - borrar buffer de stdin
+; extern void clear_buffer();
+;-----------------------------------------------------------
+; Argumentos:
+;   No recibe
+;-----------------------------------------------------------
+clear_buffer:
+    mov eax, SYS_read
+    mov ebx, STDIN
+    mov ecx, placeholder
+    mov edx, 1 ;Tamaño de placeholder
+    int 80h
+    cmp eax, 10
+    jne end
+    jmp clear_buffer
+
+end:
+    ret
+
 section .data
 
     STDIN equ 0
@@ -221,3 +242,6 @@ section .data
     SYS_open equ 5
     SYS_close equ 6
     SYS_creat equ 8
+
+section .bss
+	placeholder resb 1
