@@ -1,5 +1,6 @@
 extern int readFromShell(char * buffer, int size);
 extern int writeToShell(char * buffer, int size);
+extern void clear_buffer();
 
 
 void reverse(char* input, char* reversed, int len){
@@ -17,5 +18,6 @@ int main(int argc, char* argv[]){
     reverse(string, toPrint, len);
     writeToShell(toPrint, len);
     writeToShell("\n", 1);
+    clear_buffer();
     return 0;
 }

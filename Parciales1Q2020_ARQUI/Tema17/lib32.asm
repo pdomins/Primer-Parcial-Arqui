@@ -1,5 +1,6 @@
 GLOBAL readFromShell
 GLOBAL writeToShell
+GLOBAL clear_buffer
 section .text
 ;-----------------------------------------------------------
 ;readFromShell - lee desde terminal hasta recibir un '\n'
@@ -70,6 +71,28 @@ print:
 	ret	
 ;-----------------------------------------------------------
 
+
+;-----------------------------------------------------------
+; clear_buffer - borrar buffer de stdin
+; extern void clear_buffer();
+;-----------------------------------------------------------
+; Argumentos:
+;   No recibe
+;-----------------------------------------------------------
+clear_buffer:
+    mov eax, SYS_WRITE
+    mov ebx, STDIN
+    mov ecx, placeholder
+    mov edx, 1 ;Tamaño de placeholder
+    int 80h
+    cmp eax, 0
+    jl end
+    jmp clear_buffer
+
+end:
+    ret
+
+
 section .data                                   ; Data segment
     SYS_READ equ 3
     SYS_WRITE equ 4
@@ -77,3 +100,6 @@ section .data                                   ; Data segment
     STDOUT equ 1
     string1 db "Please enter a 15 character string: ", 0     ; Ask the user to enter a number
     length1 equ $-string1                       ; The length of the message
+
+section .bss
+    placeholder resb 1

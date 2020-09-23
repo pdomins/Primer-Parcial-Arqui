@@ -1,7 +1,7 @@
-;extern int sys_read(unsigned int fd, char* buffer, int len);
-;extern int sys_write(unsigned int fd, char* buffer, int len);
-;extern int fd_open(char* file_name, int access_mode, int file_permissions);
-;extern int fd_close(unsigned int fd);
+;extern int f_read(unsigned int fd, char* buffer, int len);
+;extern int f_write(unsigned int fd, char* buffer, int len);
+;extern int f_open(char* file_name, int access_mode, int file_permissions);
+;extern int f_close(unsigned int fd);
 
 
 GLOBAL print

@@ -1,7 +1,9 @@
-;extern int sys_read(unsigned int fd, char* buffer, int len);
-;extern int sys_write(unsigned int fd, char* buffer, int len);
-;extern int fd_open(char* file_name, int access_mode, int file_permissions);
-;extern int fd_close(unsigned int fd);
+;extern int f_read(unsigned int fd, char* buffer, int len);
+;extern int f_write(unsigned int fd, char* buffer, int len);
+;extern int f_open(char* file_name, int access_mode, int file_permissions);
+;extern int f_close(unsigned int fd);
+;extern int f_creat(char* path, int mode);
+;extern void clear_buffer();
 
 GLOBAL print
 GLOBAL exit
@@ -10,6 +12,8 @@ GLOBAL f_read
 GLOBAL f_write
 GLOBAL f_open
 GLOBAL f_close
+GLOBAL f_creat
+GLOBAL clear_buffer
 
 section .text
 
@@ -111,15 +115,15 @@ numtostr:
 
 
 ;-----------------------------------------------------------
-; read - leer de un file descriptor
-; extern int read(int file_descriptor, char * buffer, int size);
+; f_read - leer de un file descriptor
+; extern int f_read(int file_descriptor, char * buffer, int size);
 ;-----------------------------------------------------------
 ; Argumentos:
 ;   ebx: file descriptor
 ;   ecx: buffer donde se va a copiar lo leido
 ;   edx: tamaño del buffer
 ;-----------------------------------------------------------
-read:
+f_read:
 	enter 0,0
     mov eax, SYS_read
     mov ebx, [esp+4]
@@ -133,14 +137,14 @@ read:
 
 ;-----------------------------------------------------------
 ; write - escribir a un file descriptor
-; extern int write(int file_descriptor, char * buffer, int size);
+; extern int f_write(int file_descriptor, char * buffer, int size);
 ;-----------------------------------------------------------
 ; Argumentos:
 ;   ebx: file descriptor
 ;   ecx: buffer donde se va a leer
 ;   edx: tamaño del buffer
 ;-----------------------------------------------------------
-write:
+f_write:
 	enter 0,0
     mov eax, SYS_write
     mov ebx, [esp+4]
@@ -153,14 +157,14 @@ write:
 
 ;-----------------------------------------------------------
 ; open - abrir un archivo
-; extern int open(char * file_name, int access_mode, int file_permissions);
+; extern int f_open(char * file_name, int access_mode, int file_permissions);
 ;-----------------------------------------------------------
 ; Argumentos:
 ;   ebx: file name a abrir
 ;   ecx: access mode (0, 1, 2)
 ;   edx: file permissions /Necesarios solo al crear un archivo
 ;-----------------------------------------------------------
-open:
+f_open:
 		enter 0,0
         mov eax, SYS_open
         mov ebx, [esp+4]
@@ -173,12 +177,12 @@ open:
 
 ;-----------------------------------------------------------
 ; close - cerrar un archivo
-; extern int close(int file_descriptor);
+; extern int f_close(int file_descriptor);
 ;-----------------------------------------------------------
 ; Argumentos:
 ;   ebx: file descriptor a cerrar
 ;-----------------------------------------------------------
-close:
+f_close:
 	enter 0,0
     mov eax, SYS_close
     mov ebx, [esp+4]
@@ -191,7 +195,7 @@ close:
 ;            CREAT
 ;creat eax=0x08/ ebx=const char *pathname/ ecx=umode_t mode
 ;------------------------------------------------------------------------
-creat:
+f_creat:
            push ebp
            mov ebp, esp        ; armado stackframe
 
@@ -220,12 +224,13 @@ clear_buffer:
     mov ecx, placeholder
     mov edx, 1 ;Tamaño de placeholder
     int 80h
-    cmp eax, 10
-    jne end
+    cmp eax, 0
+    jl end
     jmp clear_buffer
 
 end:
     ret
+
 
 section .data
 
